@@ -27,10 +27,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'users',
     'authentication',
+    'corsheaders',
 ]
 
 
 MIDDLEWARE = [
+   'corsheaders.middleware.CorsMiddleware',
    'django.contrib.sessions.middleware.SessionMiddleware',
    'django.middleware.common.CommonMiddleware',
    'django.middleware.csrf.CsrfViewMiddleware',

@@ -40,7 +40,7 @@ const Login = () => {
 
     try {
   await login(formData);
-  const res = await API.get("/auth/me/");
+  const res = await API.get("/api/auth/me/");
   const user = res.data;
 
   if (user.is_admin) navigate("/admin");

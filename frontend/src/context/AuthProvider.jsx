@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
-import { login as loginAPI } from "../services/authService";
+import { login as loginAPI, getMe } from "../services/authService";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   // LOGIN
   const login = async (credentials) => {
     const user = await loginAPI(credentials);
-
     setUser(user);
     return user;
   };
@@ -20,33 +19,30 @@ export const AuthProvider = ({ children }) => {
   };
 
   // AUTO LOAD USER
- useEffect(() => {
-  const loadUser = async () => {
-    const token = localStorage.getItem("access");
+  useEffect(() => {
+    const loadUser = async () => {
+      const token = localStorage.getItem("access");
+      if (!token) return;
 
-    if (!token) return;
+      try {
+        const user = await getMe();
 
-    try {
-      const res = await getUser(); // 👈 DO NOT use localStorage user
-      const user = res.data;
+        if (!user) {
+          logout();
+          return;
+        }
 
-      // ❌ INVALID ROLE CHECK
-      if (!user) {
+        setUser(user);
+
+        localStorage.setItem("user", JSON.stringify(user));
+
+      } catch (err) {
         logout();
-        return;
       }
+    };
 
-      setUser(user);
-
-      localStorage.setItem("user", JSON.stringify(user));
-
-    } catch (err) {
-      logout();
-    }
-  };
-
-  loadUser();
-}, []);
+    loadUser();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

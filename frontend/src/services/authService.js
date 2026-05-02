@@ -1,7 +1,8 @@
 import API from "./api";
 
+// LOGIN
 export const login = async (data) => {
-  const res = await API.post("/auth/login/", data);
+  const res = await API.post("/api/auth/login/", data);
 
   const { access, refresh, user } = res.data;
 
@@ -12,12 +13,27 @@ export const login = async (data) => {
   return user;
 };
 
+// REGISTER
+export const register = async (data) => {
+  const res = await API.post("/api/auth/register/", data);
+  return res.data;
+};
+
+// GET ME
+export const getMe = async () => {
+  const res = await API.get("/api/auth/me/");
+
+  localStorage.setItem("user", JSON.stringify(res.data));
+  return res.data;
+};
+
+// LOGOUT
 export const logout = async () => {
   const refresh = localStorage.getItem("refresh");
 
   try {
-    await API.post("/auth/logout/", { refresh });
-  } catch (e) {}
+    await API.post("/api/auth/logout/", { refresh });
+  } catch (err) {}
 
   localStorage.clear();
 };

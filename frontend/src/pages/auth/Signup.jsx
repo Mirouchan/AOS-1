@@ -32,26 +32,32 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
+  setError("");
 
   try {
-    await API.post("/auth/register/", formData);
+    const res = await API.post("/api/auth/register/", formData);
 
-    // Get current user after registration
-    await API.post("/auth/register/", formData);
-    navigate("/user");
+    const data = res.data;
+    console.log("REGISTER RESPONSE:", data);
 
-    if (user.is_admin) {
-      navigate("/admin");
-    } else {
-      navigate("/user");
-    }
+    // DO NOT assume tokens exist
+    localStorage.setItem("user", JSON.stringify(data.user || data));
+
+    navigate("/login");
 
   } catch (err) {
-    console.error(err);
-    setError("Signup failed. Please try again.");
+    console.log("FULL ERROR:", err);
+    console.log("STATUS:", err.response?.status);
+    console.log("DATA:", err.response?.data);
+
+    setError(
+      err.response?.data?.detail ||
+      JSON.stringify(err.response?.data) ||
+      "Signup failed"
+    );
   } finally {
     setLoading(false);
   }

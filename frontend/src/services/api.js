@@ -1,7 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8001/api",
+  baseURL: "http://auth.localhost", // ✅ IMPORTANT FIX
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 API.interceptors.request.use((req) => {

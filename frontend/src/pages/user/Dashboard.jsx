@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer"; // ✅ import Footer
 import Button from "../../components/Button";
-import img2 from "../../assets/img/background/img2.jpg";
+
+
+const CONFIG = {
+  heroImage:
+    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1920&auto=format&fit=crop",
+};
+
 
 const Dashboard = () => {
   const texts = [
@@ -25,7 +31,7 @@ const Dashboard = () => {
   return (
     <div
       className="min-h-screen relative text-white bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${img2})` }}
+      style={{ backgroundImage: `url(${CONFIG.heroImage})` }}
     >
       {/* Dark + Yellow Overlay */}
       <div className="absolute inset-0 bg-black/50" />

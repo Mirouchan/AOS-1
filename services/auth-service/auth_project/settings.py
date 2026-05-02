@@ -108,11 +108,19 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 
-    # 🔥 مهم للمicroservices
     'AUTH_HEADER_TYPES': ('Bearer',),
+
+    # 🔥 مهم جدًا للمicroservices
+    'SIGNING_KEY': SECRET_KEY,
 }
 
 # ====================
 # 🌐 CORS (DEV ONLY)
 # ====================
 CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}

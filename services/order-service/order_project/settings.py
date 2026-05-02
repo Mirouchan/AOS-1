@@ -5,7 +5,10 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 🔐 SECURITY
-SECRET_KEY = os.getenv("SECRET_KEY", "same-secret-key-as-auth-service")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-dev-only-change-in-prod"
+)
 
 DEBUG = True
 
@@ -33,8 +36,7 @@ REST_FRAMEWORK = {
 
 # 🔑 JWT CONFIG (مهم جدًا)
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'AUTH_HEADER_TYPES': ('Bearer',),
+   "SIGNING_KEY":SECRET_KEY 
 }
 
 # 🚫 لا تستخدم middleware مخصص لـ JWT

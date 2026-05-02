@@ -2,74 +2,71 @@ import requests
 from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, CreateOrderItemSerializer
-
-
-# =========================
-# 🔐 Helper
-# =========================
-def get_user_id(request):
-    return request.headers.get("X-User-Id")
 
 
 # =========================
 # 🔥 Create Order
 # =========================
 class CreateOrderView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        user_id = get_user_id(request)
-
-        if not user_id:
-            return Response({"error": "Unauthorized"}, status=401)
+        token = request.auth
+        user_id = token["user_id"]
 
         items_data = request.data.get("items", [])
 
         if not items_data:
             return Response({"error": "No items provided"}, status=400)
 
+        # ✅ Validate items
         serializer = CreateOrderItemSerializer(data=items_data, many=True)
         serializer.is_valid(raise_exception=True)
         items = serializer.validated_data
 
         product_ids = [item["product_id"] for item in items]
 
+        # 🧠 Call product-service
         try:
             res = requests.post(
-                "http://product-service:8002/api/products/bulk/",
+                "http://localhost:8002/api/products/bulk/",
                 json={"ids": product_ids},
-                headers={
-                    "Authorization": request.headers.get("Authorization")
-                },
                 timeout=5
             )
 
             if res.status_code != 200:
-                return Response({"error": "Product service error"}, status=500)
+                return Response(
+                    {"error": "Product service error"},
+                    status=500
+                )
 
             products = res.json()
 
         except requests.exceptions.RequestException:
-            return Response({"error": "Product service unavailable"}, status=500)
+            return Response(
+                {"error": "Product service unavailable"},
+                status=500
+            )
 
         products_dict = {p["id"]: p for p in products}
 
-        missing = [pid for pid in product_ids if pid not in products_dict]
-        if missing:
-            return Response(
-                {"error": f"Products not found: {missing}"},
-                status=400
-            )
-
+        # 🔥 Create order safely
         with transaction.atomic():
             order = Order.objects.create(user_id=user_id)
 
             for item in items:
-                product = products_dict[item["product_id"]]
+                product = products_dict.get(item["product_id"])
+
+                if not product:
+                    return Response(
+                        {"error": f"Product {item['product_id']} not found"},
+                        status=400
+                    )
 
                 OrderItem.objects.create(
                     order=order,
@@ -88,13 +85,10 @@ class CreateOrderView(APIView):
 # 📦 My Orders
 # =========================
 class MyOrdersView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user_id = get_user_id(request)
-
-        if not user_id:
-            return Response({"error": "Unauthorized"}, status=401)
-
+        user_id = request.auth["user_id"]
         orders = Order.objects.filter(user_id=user_id)
 
         serializer = OrderSerializer(orders, many=True)
@@ -105,30 +99,24 @@ class MyOrdersView(APIView):
 # 🔍 Order Detail
 # =========================
 class OrderDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get_object(self, pk, user_id):
-        return get_object_or_404(Order, pk=pk, user_id=user_id)
-
-    # ---------------------
     def get(self, request, pk):
-        user_id = get_user_id(request)
+        user_id = request.auth["user_id"]
+        order = get_object_or_404(Order, pk=pk)
 
-        if not user_id:
-            return Response({"error": "Unauthorized"}, status=401)
-
-        order = self.get_object(pk, user_id)
+        if order.user_id != user_id:
+            return Response({"error": "Unauthorized"}, status=403)
 
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
-    # ---------------------
     def patch(self, request, pk):
-        user_id = get_user_id(request)
+        user_id = request.auth["user_id"]
+        order = get_object_or_404(Order, pk=pk)
 
-        if not user_id:
-            return Response({"error": "Unauthorized"}, status=401)
-
-        order = self.get_object(pk, user_id)
+        if order.user_id != user_id:
+            return Response({"error": "Unauthorized"}, status=403)
 
         status_value = request.data.get("status")
 
@@ -138,15 +126,15 @@ class OrderDetailView(APIView):
 
         return Response({"message": "Order updated"})
 
-    # ---------------------
     def delete(self, request, pk):
-        user_id = get_user_id(request)
+        user_id = request.auth["user_id"]
+        order = get_object_or_404(Order, pk=pk)
 
-        if not user_id:
-            return Response({"error": "Unauthorized"}, status=401)
+        # 🔒 Check ownership
+        if order.user_id != user_id:
+            return Response({"error": "Unauthorized"}, status=403)
 
-        order = self.get_object(pk, user_id)
-
+        # ⚠️ Only pending orders can be deleted
         if order.status != "pending":
             return Response({"error": "Cannot delete this order"}, status=400)
 

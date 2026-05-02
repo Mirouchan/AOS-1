@@ -11,7 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================
 # 🔐 SECURITY
 # =========================
-SECRET_KEY = os.getenv("SECRET_KEY", "same-secret-key-as-auth-service")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-dev-only-change-in-prod"
+)
 DEBUG = True
 
 ALLOWED_HOSTS = ['*'] 
@@ -138,9 +141,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'SIGNING_KEY': os.getenv("JWT_SECRET", "same-secret-key-as-auth-service"),
+
+    'SIGNING_KEY': SECRET_KEY 
 }
 
 

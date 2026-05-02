@@ -8,19 +8,19 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-dev-only-change-in-prod"
 )
 
-# SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,22 +28,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # third-party
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-
-    # your apps
     'products',
 ]
 
 
-# ✅ IMPORTANT: MIDDLEWARE ORDER FIXED
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # CORS middleware MUST be high (very important)
+   
     'corsheaders.middleware.CorsMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -76,7 +72,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database (SQLite for now)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -85,7 +81,7 @@ DATABASES = {
 }
 
 
-# Password validation
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -94,18 +90,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 
-# Static files
+
 STATIC_URL = 'static/'
 
 
-# REST FRAMEWORK
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -116,16 +112,13 @@ REST_FRAMEWORK = {
 }
 
 
-# =========================
-# ✅ CORS CONFIG (FIX)
-# =========================
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # React Vite frontend
 ]
 
-# OR (optional for dev only)
-# CORS_ALLOW_ALL_ORIGINS = True
+
 
 CORS_ALLOW_CREDENTIALS = True
 

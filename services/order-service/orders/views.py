@@ -9,9 +9,7 @@ from .models import Order, OrderItem
 from .serializers import OrderSerializer, CreateOrderItemSerializer
 
 
-# =========================
-# 🔥 Create Order
-# =========================
+
 class CreateOrderView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -24,14 +22,14 @@ class CreateOrderView(APIView):
         if not items_data:
             return Response({"error": "No items provided"}, status=400)
 
-        # ✅ Validate items
+        # Validate items
         serializer = CreateOrderItemSerializer(data=items_data, many=True)
         serializer.is_valid(raise_exception=True)
         items = serializer.validated_data
 
         product_ids = [item["product_id"] for item in items]
 
-        # 🧠 Call product-service
+        #  Call product-service
         try:
             res = requests.post(
                 "http://localhost:8002/api/products/bulk/",
@@ -55,7 +53,7 @@ class CreateOrderView(APIView):
 
         products_dict = {p["id"]: p for p in products}
 
-        # 🔥 Create order safely
+        # Create order safely
         with transaction.atomic():
             order = Order.objects.create(user_id=user_id)
 
@@ -81,9 +79,7 @@ class CreateOrderView(APIView):
         }, status=201)
 
 
-# =========================
-# 📦 My Orders
-# =========================
+
 class MyOrdersView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -95,9 +91,7 @@ class MyOrdersView(APIView):
         return Response(serializer.data)
 
 
-# =========================
-# 🔍 Order Detail
-# =========================
+
 class OrderDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -130,11 +124,11 @@ class OrderDetailView(APIView):
         user_id = request.auth["user_id"]
         order = get_object_or_404(Order, pk=pk)
 
-        # 🔒 Check ownership
+        #  Check ownership
         if order.user_id != user_id:
             return Response({"error": "Unauthorized"}, status=403)
 
-        # ⚠️ Only pending orders can be deleted
+        #  Only pending orders can be deleted
         if order.status != "pending":
             return Response({"error": "Cannot delete this order"}, status=400)
 

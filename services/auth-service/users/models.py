@@ -7,7 +7,7 @@ class User(AbstractUser):
     profile_image = models.ImageField(upload_to='profiles/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # 🔒 HARD SAFETY: prevent accidental admin assignment
+       
         if not self.is_superuser:
             self.is_staff = False
 

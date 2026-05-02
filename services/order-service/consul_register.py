@@ -27,11 +27,11 @@ def register_service():
 
     try:
         response = requests.put(url, json=payload)
-        print("✅ Registered:", response.status_code)
+        print(" Registered:", response.status_code)
     except Exception as e:
-        print("❌ Error registering service:", e)
+        print(" Error registering service:", e)
 
 if __name__ == "__main__":
-    # ننتظر شويه باش Consul يطلع
+   
     time.sleep(10)
     register_service()

@@ -35,6 +35,6 @@ urlpatterns = [
     path('health/', health), 
  
 ]
-# ✅ THIS IS REQUIRED FOR IMAGE DISPLAY IN DEV
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

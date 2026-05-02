@@ -8,7 +8,7 @@ def verify_user(token):
     response = requests.get(AUTH_SERVICE_URL, headers=headers)
     if response.status_code != 200:
         return None
-    return response.json()  # should return user info including 'id', 'username', etc.
+    return response.json()  # should return user info including id,username...
 
 def get_product(product_id):
     response = requests.get(f"{PRODUCT_SERVICE_URL}{product_id}/")

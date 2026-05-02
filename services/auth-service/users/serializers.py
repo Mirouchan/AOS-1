@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             'password'
         ]
 
-    # ✅ CREATE
+    #  CREATE
     def create(self, validated_data):
         password = validated_data.pop('password', None)
 
@@ -27,14 +27,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         if password:
             user.set_password(password)
 
-        # 🔒 FORCE NORMAL USER (VERY IMPORTANT)
+        #  FORCE NORMAL USER 
         user.is_staff = False
         user.is_superuser = False
 
         user.save()
         return user
 
-    # ✅ UPDATE
+    #  UPDATE
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)
 

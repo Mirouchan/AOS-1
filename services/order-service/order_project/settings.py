@@ -4,7 +4,7 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 🔐 SECURITY
+
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-dev-only-change-in-prod"
@@ -12,9 +12,9 @@ SECRET_KEY = os.getenv(
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']  # للتطوير فقط
+ALLOWED_HOSTS = ['*']  
 
-# 📦 APPS
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,25 +27,24 @@ INSTALLED_APPS = [
     'orders',
 ]
 
-# 🔐 DRF + JWT
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
-# 🔑 JWT CONFIG (مهم جدًا)
+
 SIMPLE_JWT = {
    "SIGNING_KEY":SECRET_KEY 
 }
 
-# 🚫 لا تستخدم middleware مخصص لـ JWT
+
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # must be on top
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # CSRF ممكن تعطله إذا API فقط
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -71,7 +70,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'order_project.wsgi.application'
 
-# 🗄️ DATABASE
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -83,7 +82,7 @@ DATABASES = {
     }
 }
 
-# 🔒 PASSWORD VALIDATION
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -91,14 +90,14 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# 🌍 INTERNATIONALIZATION
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# 📁 STATIC
+
 STATIC_URL = 'static/'
 
-# ⚡ تحسينات إضافية
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

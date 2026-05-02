@@ -27,5 +27,5 @@ class ProductSerializer(serializers.ModelSerializer):
             'stock',
             'category',
             'category_id',
-            'image',   # ✅ FIXED
+            'image',  
         ]

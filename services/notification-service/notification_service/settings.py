@@ -8,9 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# =========================
-# 🔐 SECURITY
-# =========================
+
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-dev-only-change-in-prod"
@@ -20,9 +18,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*'] 
 
 
-# =========================
-# 📦 APPLICATIONS
-# =========================
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,9 +37,7 @@ INSTALLED_APPS = [
 ]
 
 
-# =========================
-# 🧱 MIDDLEWARE
-# =========================
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # MUST be first
     'django.middleware.security.SecurityMiddleware',
@@ -59,9 +53,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'notification_service.urls'
 
 
-# =========================
-# 🖼 TEMPLATES
-# =========================
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -81,9 +73,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'notification_service.wsgi.application'
 
 
-# =========================
-# 🗄 DATABASE (PRODUCTION READY)
-# =========================
+
 DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.mysql',
@@ -96,9 +86,7 @@ DATABASES = {
 }
 
 
-# =========================
-# 🔐 PASSWORD VALIDATION
-# =========================
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -107,30 +95,22 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# =========================
-# 🌍 INTERNATIONALIZATION
-# =========================
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 
-# =========================
-# 📁 STATIC
-# =========================
+
 STATIC_URL = 'static/'
 
 
-# =========================
-# 🔑 DEFAULT PK
-# =========================
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# =========================
-# 🔐 DRF + JWT
-# =========================
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

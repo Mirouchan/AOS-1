@@ -4,9 +4,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ====================
-# 🔐 SECURITY (DEV ONLY)
-# ====================
+
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-dev-only-change-in-prod"
@@ -14,11 +12,9 @@ SECRET_KEY = os.getenv(
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]  # dev only
+ALLOWED_HOSTS = ["*"]  
 
-# ====================
-# 📦 APPS
-# ====================
+
 INSTALLED_APPS = [
    'django.contrib.admin',
 'django.contrib.auth',
@@ -26,18 +22,13 @@ INSTALLED_APPS = [
 'django.contrib.sessions',
 'django.contrib.messages',
 'django.contrib.staticfiles',
-    # third party
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-
-    # local apps
     'users',
     'authentication',
 ]
 
-# ====================
-# 🚫 MIDDLEWARE (SIMPLIFIED)
-# ====================
+
 MIDDLEWARE = [
    'django.contrib.sessions.middleware.SessionMiddleware',
    'django.middleware.common.CommonMiddleware',
@@ -65,9 +56,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'auth_project.wsgi.application'
 
-# ====================
-# 🗄️ DATABASE
-# ====================
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -79,28 +68,20 @@ DATABASES = {
     }
 }
 
-# ====================
-# 👤 CUSTOM USER MODEL
-# ====================
+
 AUTH_USER_MODEL = 'users.User'
 
-# ====================
-# 🌍 INTERNATIONALIZATION
-# ====================
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ====================
-# 📦 STATIC
-# ====================
+
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ====================
-# 🔥 SIMPLE JWT (ISSUER ONLY)
-# ====================
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -110,13 +91,11 @@ SIMPLE_JWT = {
 
     'AUTH_HEADER_TYPES': ('Bearer',),
 
-    # 🔥 مهم جدًا للمicroservices
+
     'SIGNING_KEY': SECRET_KEY,
 }
 
-# ====================
-# 🌐 CORS (DEV ONLY)
-# ====================
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {

@@ -57,7 +57,7 @@ class LoginView(APIView):
 
 
 # -------------------------
-# LOGOUT (FIXED INDENTATION)
+# LOGOUT 
 # -------------------------
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -85,7 +85,7 @@ class LogoutView(APIView):
 
 
 # -------------------------
-# ME (PROFILE)
+# PROFILE
 # -------------------------
 class MeView(APIView):
     permission_classes = [IsAuthenticated]

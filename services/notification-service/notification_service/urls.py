@@ -7,9 +7,8 @@ def health(request):
     return JsonResponse({"status": "ok"})
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('notifications.urls')),  
-    path('health/', health), 
-    path('api/auth/', include('notifications.urls_auth')),  
-
+    path('admin/', admin.site.urls), 
+    path('api/notifications/', include('notifications.urls')),
+    path('health/', health),
+    path('api/auth/', include('notifications.urls_auth')),
 ]

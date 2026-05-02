@@ -30,7 +30,7 @@ def health(request):
 
 
 urlpatterns = [
-    path('api/', include('products.urls')),
+    path('api/products/', include('products.urls')),
     path('admin/', admin.site.urls),
     path('health/', health), 
  

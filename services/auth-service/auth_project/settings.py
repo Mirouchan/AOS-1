@@ -4,24 +4,17 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-    "django-insecure-dev-only-change-in-prod"
-)
-
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-only-change-in-prod")
 DEBUG = True
-
-ALLOWED_HOSTS = ["*"]  
-
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-   'django.contrib.admin',
-'django.contrib.auth',
-'django.contrib.contenttypes',
-'django.contrib.sessions',
-'django.contrib.messages',
-'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -30,14 +23,14 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-
 MIDDLEWARE = [
-   'corsheaders.middleware.CorsMiddleware',
-   'django.contrib.sessions.middleware.SessionMiddleware',
-   'django.middleware.common.CommonMiddleware',
-   'django.middleware.csrf.CsrfViewMiddleware',
-   'django.contrib.auth.middleware.AuthenticationMiddleware',
-   'django.contrib.messages.middleware.MessageMiddleware',
+    'corsheaders.middleware.CorsMiddleware',   # must be first
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 ROOT_URLCONF = 'auth_project.urls'
@@ -48,17 +41,16 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
-           'context_processors': [
-                 'django.template.context_processors.request',
-                 'django.contrib.auth.context_processors.auth',
-                 'django.contrib.messages.context_processors.messages',
-]
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'auth_project.wsgi.application'
-
 
 DATABASES = {
     'default': {
@@ -71,31 +63,26 @@ DATABASES = {
     }
 }
 
-
 AUTH_USER_MODEL = 'users.User'
-
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": "shared_secret_key",  # SAME everywhere
+    "SIGNING_KEY": os.getenv("JWT_SECRET_KEY", "shared_secret_key"),
 }
 
-
+# CORS – allow all origins for development (or specify frontend.localhost)
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (

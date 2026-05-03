@@ -15,7 +15,6 @@ services:
     networks:
       - backend
     restart: unless-stopped
-   
 
   consul:
     image: hashicorp/consul:1.20.3
@@ -54,6 +53,7 @@ services:
       SERVICE_NAME: auth-service
       SERVICE_PORT: 8000
       CONSUL_HOST: consul
+      JWT_SECRET_KEY: shared_secret_key
     entrypoint: /app/entrypoint.sh
     networks:
       - backend
@@ -80,7 +80,7 @@ services:
     volumes:
       - ./services/product-service:/app
     depends_on:
-      - product-db   # ✅ صححناها
+      - product-db
     environment:
       DB_HOST: product-db
       DB_NAME: product_db
@@ -89,7 +89,8 @@ services:
       SERVICE_NAME: product-service
       SERVICE_PORT: 8000
       CONSUL_HOST: consul
-    entrypoint: /app/entrypoint.sh   # ✅ مهم
+      JWT_SECRET_KEY: shared_secret_key
+    entrypoint: /app/entrypoint.sh
     networks:
       - backend
     labels:
@@ -124,6 +125,7 @@ services:
       SERVICE_NAME: order-service
       SERVICE_PORT: 8000
       CONSUL_HOST: consul
+      JWT_SECRET_KEY: shared_secret_key
     entrypoint: /app/entrypoint.sh
     networks:
       - backend
@@ -171,9 +173,12 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: admin
+      RABBITMQ_PASS: admin123
       SERVICE_NAME: notification-service
       SERVICE_PORT: 8000
       CONSUL_HOST: consul
+      JWT_SECRET_KEY: shared_secret_key
     entrypoint: /app/entrypoint.sh
     networks:
       - backend
@@ -201,4 +206,3 @@ volumes:
   order_db_data:
   product_db_data:
   notification_db_data:
-  rabbitmq_data:

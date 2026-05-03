@@ -1,19 +1,15 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://auth.localhost", // ✅ IMPORTANT FIX
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: "http://auth.localhost/api",   // ✅ added /api
+  headers: { "Content-Type": "application/json" },
 });
 
 API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("access");
-
+  const token = localStorage.getItem("token");
   if (token) {
     req.headers.Authorization = `Bearer ${token}`;
   }
-
   return req;
 });
 

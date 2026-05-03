@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
-import { getUsers } from "../../services/userService";
-
 import {
   FaUsers,
   FaProjectDiagram,
@@ -10,28 +8,9 @@ import {
 } from "react-icons/fa";
 
 const Dashboard = () => {
-  const [usersCount, setUsersCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  // FETCH REAL USERS
-  const fetchUsersCount = async () => {
-    try {
-      const res = await getUsers();
-      setUsersCount(res.data.length);
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsersCount();
-  }, []);
-
   const stats = [
-    { title: "Users", value: usersCount, icon: FaUsers },
-    { title: "Projects", value: "320", icon: FaProjectDiagram }, // still mock (no API yet)
+    { title: "Users", value: "124", icon: FaUsers },
+    { title: "Projects", value: "320", icon: FaProjectDiagram },
     { title: "Revenue", value: "$12,400", icon: FaDollarSign },
     { title: "Tasks", value: "89", icon: FaTasks },
   ];
@@ -83,9 +62,7 @@ const Dashboard = () => {
 
                 {/* VALUE */}
                 <h3 className="text-2xl font-bold mt-1 text-light-text dark:text-dark-text">
-                  {loading && item.title === "Users"
-                    ? "Loading..."
-                    : item.value}
+                  {item.value}
                 </h3>
               </div>
             );

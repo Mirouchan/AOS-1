@@ -119,7 +119,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": "shared_secret_key",  # SAME as auth_service
+    "SIGNING_KEY": os.getenv("JWT_SECRET_KEY", "shared_secret_key"),
 }
 
 

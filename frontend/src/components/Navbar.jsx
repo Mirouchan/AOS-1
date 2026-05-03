@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";          // ✅ import Link
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
 import ThemeToggle from "./ThemeToggle";
 import logo from "../assets/img/logo/img.png";
@@ -19,7 +20,6 @@ const Navbar = () => {
         console.log("User fetch error:", err);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -29,20 +29,21 @@ const Navbar = () => {
       <nav className="w-full fixed top-0 left-0 z-40 backdrop-blur-md bg-light-background/80 dark:bg-dark-background/80 shadow-md text-light-text dark:text-dark-text">
         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
 
-          {/* LOGO */}
-          <div className="flex items-center text-2xl font-bold">
+          {/* LOGO with home link */}
+          <Link to="/" className="flex items-center text-2xl font-bold">
             <span className="text-light-primary dark:text-dark-primary">Kav</span>
             <img src={logo} alt="logo" className="h-6 mx-1" />
             <span>nal</span>
-          </div>
+          </Link>
 
           {/* DESKTOP MENU */}
           <div className="hidden md:flex items-center gap-8">
-
-            <a className="hover:text-light-primary dark:hover:text-dark-primary transition">Home</a>
-            <a className="hover:text-light-primary dark:hover:text-dark-primary transition">Features</a>
-            <a className="hover:text-light-primary dark:hover:text-dark-primary transition">Pricing</a>
-            <a className="hover:text-light-primary dark:hover:text-dark-primary transition">Contact</a>
+            <Link to="/" className="hover:text-light-primary dark:hover:text-dark-primary transition">Home</Link>
+            <Link to="/products" className="hover:text-light-primary dark:hover:text-dark-primary transition">Products</Link>
+            {/* You can keep these as <a> or replace with Link if they have internal routes */}
+            <a href="#" className="hover:text-light-primary dark:hover:text-dark-primary transition">Features</a>
+            <a href="#" className="hover:text-light-primary dark:hover:text-dark-primary transition">Pricing</a>
+            <a href="#" className="hover:text-light-primary dark:hover:text-dark-primary transition">Contact</a>
 
             <ThemeToggle />
 
@@ -57,10 +58,9 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* MOBILE */}
+          {/* MOBILE MENU TOGGLE */}
           <div className="md:hidden flex items-center gap-3">
             <ThemeToggle />
-
             <button onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
@@ -71,14 +71,16 @@ const Navbar = () => {
         {menuOpen && (
           <div className="md:hidden px-6 pb-4 flex flex-col gap-4
           bg-light-background dark:bg-dark-background shadow-lg">
-
-            <a className="hover:text-light-primary dark:hover:text-dark-primary">Home</a>
-            <a className="hover:text-light-primary dark:hover:text-dark-primary">Features</a>
-            <a className="hover:text-light-primary dark:hover:text-dark-primary">Pricing</a>
-            <a className="hover:text-light-primary dark:hover:text-dark-primary">Contact</a>
-
+            <Link to="/" className="hover:text-light-primary dark:hover:text-dark-primary" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link to="/products" className="hover:text-light-primary dark:hover:text-dark-primary" onClick={() => setMenuOpen(false)}>Products</Link>
+            <a href="#" className="hover:text-light-primary dark:hover:text-dark-primary">Features</a>
+            <a href="#" className="hover:text-light-primary dark:hover:text-dark-primary">Pricing</a>
+            <a href="#" className="hover:text-light-primary dark:hover:text-dark-primary">Contact</a>
             <button
-              onClick={() => setProfileOpen(true)}
+              onClick={() => {
+                setProfileOpen(true);
+                setMenuOpen(false);
+              }}
               className="flex items-center gap-2"
             >
               <FiUser />
@@ -91,18 +93,9 @@ const Navbar = () => {
       {/* PROFILE MODAL */}
       {profileOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-
-          {/* BACKDROP */}
-          <div
-            className="absolute inset-0"
-            onClick={() => setProfileOpen(false)}
-          />
-
-          {/* CARD */}
+          <div className="absolute inset-0" onClick={() => setProfileOpen(false)} />
           <div className="relative z-10">
             <UserProfileCard user={user} setUser={setUser} />
-
-            {/* CLOSE */}
             <button
               onClick={() => setProfileOpen(false)}
               className="absolute -top-3 -right-3 w-8 h-8 rounded-full

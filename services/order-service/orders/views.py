@@ -32,7 +32,7 @@ class CreateOrderView(APIView):
         #  Call product-service
         try:
             res = requests.post(
-                "http://localhost:8002/api/products/bulk/",
+                "http://product-service:8000/api/products/bulk/",
                 json={"ids": product_ids},
                 timeout=5
             )

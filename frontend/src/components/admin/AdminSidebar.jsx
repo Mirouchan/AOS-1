@@ -6,6 +6,7 @@ import logo from "../../assets/img/logo/img.png";
 const menu = [
   { name: "Dashboard", icon: FaTachometerAlt, path: "/admin", end: true },
   { name: "Users", icon: FaUsers, path: "/admin/users" },
+   { name: "Orders", icon: FaBox , path: "/admin/orders" },
   { name: "Categories", icon: FaList, path: "/admin/categories" },
   { name: "Products", icon: FaBox, path: "/admin/products" },
   { name: "Settings", icon: FaCog, path: "/admin/settings" },

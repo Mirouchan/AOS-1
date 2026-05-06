@@ -36,22 +36,23 @@ const AdminNavbar = () => {
 
   // LOGOUT
   const handleLogout = async () => {
-    try {
-      const refresh = localStorage.getItem("refresh");
-
-      await API.post("/auth/logout/", { refresh });
-
-    } catch (error) {
-      console.error(error);
+  try {
+    const refresh = localStorage.getItem("refresh_token") || localStorage.getItem("refresh");
+    if (refresh) {
+      await API.post("auth/logout/", { refresh });
     }
+  } catch (error) {
+    console.error(error);
+  }
 
-    // clear all session data
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
-    localStorage.removeItem("user");
+  // clear all session data
+  localStorage.removeItem("token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("refresh");
+  localStorage.removeItem("user");
 
-    navigate("/login", { replace: true });
-  };
+  navigate("/login", { replace: true });
+};
 
   return (
     <header

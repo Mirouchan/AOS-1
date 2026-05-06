@@ -9,7 +9,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-only-change-in-prod")
+
 DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = ["*"]  # behind Traefik, safe for development
 
@@ -101,6 +101,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ),
 }
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev")
 # Full JWT settings (must match auth service exactly)
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
